@@ -1,2 +1,3 @@
 
 banana;fruta;240;791634
+caneta;telemoveis;229;460344

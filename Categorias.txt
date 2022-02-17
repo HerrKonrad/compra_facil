@@ -10,3 +10,5 @@ brinquedo;297660
 talher;887369
 tedte;197209
 telemoveis;199821
+
+escolar;873598
