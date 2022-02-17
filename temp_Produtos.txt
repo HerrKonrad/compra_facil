@@ -1,0 +1,9 @@
+pepsi;xpto;1970;906356
+cerveja;bebida;350;234730
+maca;teste;150;988249
+camisinha;teste;1970;351967
+xpto;teste;1870;547145
+carro;brinquedo;19060;233529
+garfo;talher;19010;812254
+tangerina;fruta;179;1106879
+abacate;fruta;559;380693

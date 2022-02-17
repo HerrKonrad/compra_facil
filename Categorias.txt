@@ -1,0 +1,12 @@
+
+fruta;831901
+bebida;316728
+xpto;561365
+teste;869502
+sexo;902595
+teste123;1054732
+hardware;297252
+brinquedo;297660
+talher;887369
+tedte;197209
+telemoveis;199821
