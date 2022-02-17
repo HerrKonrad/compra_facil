@@ -130,6 +130,7 @@ int criarFicheiroItensCabazBin()
     return 0;
 }
 
+//TODO: criar ficheiro item listat
 // FUNÇÕES AUXILIARES
 
 int gerarCodigo()
@@ -238,6 +239,18 @@ int eliminarProduto()
     rename(nome_temp, nome_f);
 }
 
+
+int criarItemLista(ITEMLISTA item)
+{
+    FILE *f = fopen("ItemLista.txt", "a");
+    if(item.estado != 0)
+    {
+        item.estado = 1;
+    }
+
+
+    return 0;
+}
 int editarProdutos()
 {
     PRODUTO produtos;
@@ -291,33 +304,7 @@ int editarProdutos()
 }
 
 // TODO: REMOVER
-void xpto()
-{
-    int i;
-    int nProduto;
-    float preco;
-    char nome[40], categoria[50];
-    FILE *f = fopen("Produtos.txt", "w");
 
-    printf("Quantos produtos deseja inserir: ");
-    scanf(" %d", &nProduto);
-
-    for (i = 0; i < nProduto; i++)
-    {
-
-        printf("\nNome Produto:");
-        scanf("%s", &nome);
-
-        printf("\nPreco: ");
-        scanf("%f", &preco);
-
-        printf("\nCategoria: ");
-        scanf("%s", &categoria);
-
-        fprintf(f, "\n%s;%f;%s", nome, preco, categoria);
-    }
-    fclose(f);
-}
 
 int eliminarLista()
 {
