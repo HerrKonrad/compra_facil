@@ -190,9 +190,11 @@ int Temp_EliminarProduto(PRODUTO produto)
     fclose(f);
     return temp;
 }
-int eliminarProduto()
+
+int eliminarProduto(int codigo)
 {
     PRODUTO produto;
+    
     int linha;
     linha = Temp_EliminarProduto(produto);
 
@@ -240,6 +242,16 @@ int eliminarProduto()
 }
 
 
+void menuEliminarProduto()
+{
+    PRODUTO *prod;
+    prod = listarProdutos();
+    printProdutos(prod);
+    int codigo = 0;
+    printf("\n Digite o codigo do produto que deseja eliminar");
+    scanf("%d ", &codigo);
+    eliminarProduto(codigo);
+}
 int criarItemLista(ITEMLISTA item)
 {
     FILE *f = fopen("ItemLista.txt", "a");
@@ -247,8 +259,6 @@ int criarItemLista(ITEMLISTA item)
     {
         item.estado = 1;
     }
-
-
     return 0;
 }
 int editarProdutos()
