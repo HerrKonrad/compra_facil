@@ -1,3 +1,5 @@
-
-banana;fruta;240;791634
-caneta;telemoveis;229;460344
+teste;bebida;240;451153
+xpto;hardware;240;731344
+abc;bebida;240;704556
+yyy;teste;139;802725
+abcdf;teste;240;184849

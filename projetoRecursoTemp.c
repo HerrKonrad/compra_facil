@@ -37,13 +37,12 @@ typedef struct itemLista
 {
     int quantidade;
     int estado;
-    int codigo;
     PRODUTO produto;
 } ITEMLISTA;
 
 typedef struct lista
 {
-    ITEMLISTA item;
+    ITEMLISTA *ITEM;
     char nome[40];
     int codigo;
 } LISTA;
@@ -101,7 +100,7 @@ int criarFicheiroProduto()
 }
 int criarFicheiroProdutoBin()
 {
-    FILE *F1 = fopen("Produtos.bin", "a+b");
+    FILE *F1 = fopen("Produtos.txt", "a+b");
     // fprintf(F1, "Nome;Categoria;Preço;Codigo");
 
     return 0;
@@ -113,9 +112,8 @@ int criarFicheiroCategorias()
     return 0;
 }
 int criarFicheiroCategoriasBin()
-
 {
-    FILE *F1 = fopen("Categorias.bin", "a+b");
+    FILE *F1 = fopen("Categorias.txt", "a+b");
 
     return 0;
 }
@@ -127,23 +125,10 @@ int criarFicheiroItensCabaz()
 }
 int criarFicheiroItensCabazBin()
 {
-    FILE *F1 = fopen("ItensCabaz.bin", "a+b");
+    FILE *F1 = fopen("ItensCabaz.txt", "a+b");
+
     return 0;
 }
-
-int criarFicheiroItensLista()
-{
-    FILE *F1 = fopen("ItensLista.txt", "a+");
-    return 0;
-}
-
-int criarFicheiroItensListaBin()
-{
-    FILE *F1 = fopen("ItensLista.bin", "a+b");
-    return 0;
-}
-
-
 
 //TODO: criar ficheiro item listat
 // FUNÇÕES AUXILIARES
@@ -179,18 +164,17 @@ int Temp_EliminarProduto(PRODUTO produto)
     return 0;
 }
 
+
+
+
+
 int criarItemLista(ITEMLISTA item)
 {
-    FILE *f = fopen("ItensLista.txt", "a");
+    FILE *f = fopen("ItemLista.txt", "a");
     if(item.estado != 0)
     {
         item.estado = 1;
     }
-    // codigo lista, nome produto, qtd produto, estado, codigo produto
-    fprintf(f, "%d;%s;%d;%d;%d\n", item.codigo,
-     item.produto.nome, item.quantidade, item.estado, item.produto.codigo);
-    fclose(f);
-    
     return 0;
 }
 int editarProdutos()
@@ -220,7 +204,7 @@ int editarProdutos()
     bool keep_reading = true;
     int current_line = 1;
     // Enquanto a variavel keep_reading for verdadeira faz:
-    // Vai buscar os dados na linha atual e insere no ficheiro temp_Produtos
+    // Vai buscar os dados na linha atual e insere no ficheiro temp_Pessoas
     // Quando o ficheiro acabar ou a linha que foi dada pela funcao for igual a linha coloca a varivel a falso e fecha o ficheiro
     // Quando as linhas forem iguals pede ao utilizador dados nomes e insere no ficheiro
     do
@@ -298,7 +282,7 @@ int criarProduto(PRODUTO produto)
 int criarLista(LISTA lista)
 {
     int i;
-    FILE *F1 = fopen("Lista.txt", "a");
+    FILE *F1 = fopen("ListaCompra.txt", "a");
     lista.codigo = gerarCodigo();
     fprintf(F1, "%s;%d \n", lista.nome, lista.codigo);
     fclose(F1);
@@ -321,6 +305,18 @@ int criarCategoria(CATEGORIA categoria)
 }
 
 // FUNÇÕES DE LISTAR
+
+// TODO: FAZER FUNÇÃO
+
+// TODO: FAZER FUNÇÃO
+ITEMLISTA *listarItensLista(int codigoLista)
+{
+}
+
+// TODO: FAZER FUNÇÃO
+LISTA *listarListas()
+{
+}
 int contarProdutos(PRODUTO *prod)
 {
     int i = 0;
@@ -342,35 +338,8 @@ int contarCategoria(CATEGORIA *cat)
 
     return i;
 }
-int contarLista(LISTA *lista)
-{
-    int i = 0;
-    do
-    {
-        i++;
-    } while (lista[i].codigo != 0);
 
-    return i;
-}
-
-int contarProdutosLista(LISTA *lista, int k)
-{
-    int j = 0;
-    
-    return j;
-}
-
-int contarItensLista(ITEMLISTA *item)
-{
-    int i = 0;
-    do
-    {
-        i++;
-    } while (item[i].codigo != 0);
-    
-    return i;
-}
-
+// TODO: limpar código
 PRODUTO * listarProdutos()
 {
     PRODUTO *prod = (PRODUTO*) malloc(65536 * sizeof(PRODUTO));
@@ -383,7 +352,7 @@ PRODUTO * listarProdutos()
 
     while (!feof(f))
     {
-        STRING *V = splitLine(f, 4, &n_campos_lidos, ";\r\n");
+        STRING *V = splitLine(f, 4, &n_campos_lidos, ";\r\n"); // NÃO ESTÁ FUNCIONANDO
         ++n_linhas_lidas;
         for (i = 0; i < n_campos_lidos; i++)
         {
@@ -415,10 +384,14 @@ PRODUTO * listarProdutos()
         free(V);
         count++;
     }
+    printf("...Teste: %d \n", count - 1);
+    printf("Teste: %d \n", sizeof(prod));
+
     prod =  realloc(prod, (count - 1) * sizeof(prod));
     return prod;
 }
 
+// TODO: FAZER FUNÇÃO
 CATEGORIA *listarCategorias()
 {
     int n_campos_max = 20;
@@ -463,6 +436,7 @@ CATEGORIA *listarCategorias()
     }
 
     cat = realloc(cat, (count - 1) * sizeof(CATEGORIA));
+    printf("Teste: %d \n", sizeof(cat));
 
     return cat;
 }
@@ -470,7 +444,6 @@ CATEGORIA *listarCategorias()
 void printCategorias(CATEGORIA *categoria)
 {
     int i;
-    printf("-----------------CATEGORIAS-----------------\n");
     for (i = 0; i < contarCategoria(categoria); i++)
     {
         printf("\n %d.", i + 1);
@@ -482,7 +455,6 @@ void printCategorias(CATEGORIA *categoria)
 void printProdutos(PRODUTO *produto)
 {
     int i;
-    printf("-----------------PRODUTOS-----------------\n");
     for (i = 0; i < contarProdutos(produto); i++)
     {
         printf("\n %d. ", i);
@@ -493,199 +465,11 @@ void printProdutos(PRODUTO *produto)
     }
 }
 
-LISTA *listarListas()
-{
-    
-
-    int n_campos_max = 20;
-    int n_campos_lidos;
-    int n_linhas_lidas = 1;
-    int i;
-    FILE *f = fopen("Lista.txt", "r");
-    int count = 1;
-
-    LISTA *lista = (LISTA *)malloc(65536 * sizeof(LISTA));
-    while (!feof(f))
-    {
-        // Aloca os dados numa string V
-        STRING *V = splitLine(f, 2, &n_campos_lidos, ";\r\n");
-        ++n_linhas_lidas;
-        // printf("%s", V);
-        // Le os dados no ficheiro com os separados ; \r e \n
-        // printf("%d. ", count);
-
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-            // printf("%d \t", i+1);
-            // Le os dados nos campos e
-            // Verifica se na posicao i+1 == 1 Le os dados na primeira 
-
-            if (i + 1 == 1)
-            {
-                strcpy(lista[count - 1].nome, V[i]);
-            }
-            else if (i + 1 == 2)
-            {
-                lista[count - 1].codigo = atoi(V[i]);
-            }
-        }
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-
-            free(V[i]);
-        }
-        free(V);
-        count++;
-    }
-
-    lista = realloc(lista, (count - 1) * sizeof(LISTA));
-
-    return lista;
-
-}
-void printListas(LISTA *lista)
-{
-    int i;
-    printf("-----------------LISTAS-----------------\n");
-    for (i = 0; i < contarLista(lista); i++)
-    {
-        printf("\n %d.", i + 1);
-        printf("Nome:  %s ", lista[i].nome);
-        printf("  Codigo: %d \n", lista[i].codigo);
-    }
-}
-
 int calcularPrecoTotalLista()
 {
-    LISTA *lista;
-    int preco=0.0, i, j=0;
-    for(i=0; i<contarProdutosLista(lista,j); i++){
-
-    }
 }
 
-ITEMLISTA * listarItensLista()
-{
-    ITEMLISTA *item = (ITEMLISTA*) malloc(65536 * sizeof(ITEMLISTA));
-    int n_campos_max = 20;
-    int n_campos_lidos;
-    int n_linhas_lidas = 1;
-    int i,t,r;
-    int count = 1;
-    FILE *f = fopen("ItensLista.txt", "r");
-
-    while (!feof(f))
-    {
-        STRING *V = splitLine(f, 5, &n_campos_lidos, ";\r\n");
-        ++n_linhas_lidas;
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-            if (i + 1 == 1)
-            {
-                int temp = atoi(V[i]);
-                item[count - 1].codigo = temp;    //codigo da lista
-            } 
-            //FAZER UM FOR
-            else if (i + 1 == 2)
-            {
-                
-                strcpy(item[count - 1].produto.nome, V[i]);     //nome do produto
-            }
-            else if (i + 1 == 3)
-            {
-                
-                int temp = atoi(V[i]);
-                item[count - 1].quantidade = temp;            // quantidade do produto                
-            }
-            else if (i + 1 == 4)
-            {
-                int temp = atoi(V[i]);
-                item[count - 1].estado = temp;             // estado do produto                
-            }
-            else if (i + 1 == 5)
-            {
-                int temp = atoi(V[i]);
-                item[count - 1].estado = temp;             // codigo do produto                
-            }
-        }
-        // Desloca a mem�ria alocada em V[i]
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-            free(V[i]);
-        }
-        
-        free(V);
-        count++;
-    }
-    item =  realloc(item, (count - 1) * sizeof(item));
-    puts("erro");
-    fclose(f);
-    return item;
-}
 // LISTAGENS
-
-ITEMLISTA *listarItensListaPorCodigoLista(int codigo)
-{
-   ITEMLISTA *item = (ITEMLISTA*) malloc(65536 * sizeof(ITEMLISTA));
-    int n_campos_max = 20;
-    int n_campos_lidos;
-    int n_linhas_lidas = 1;
-    int i,t,r;
-    int count = 1;
-    FILE *f = fopen("ItensLista.txt", "r");
-
-    while (!feof(f))
-    {
-        STRING *V = splitLine(f, 5, &n_campos_lidos, ";\r\n");
-        ++n_linhas_lidas;
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-            if (i + 1 == 1)
-            {
-                int temp = atoi(V[i]);
-                if(temp == codigo)
-                {
-                    continue;
-                }
-                item[count - 1].codigo = temp;    //codigo da lista
-            } 
-            //FAZER UM FOR
-            else if (i + 1 == 2)
-            {
-                
-                strcpy(item[count - 1].produto.nome, V[i]);     //nome do produto
-            }
-            else if (i + 1 == 3)
-            {
-                
-                int temp = atoi(V[i]);
-                item[count - 1].quantidade = temp;            // quantidade do produto                
-            }
-            else if (i + 1 == 4)
-            {
-                int temp = atoi(V[i]);
-                item[count - 1].estado = temp;             // estado do produto                
-            }
-            else if (i + 1 == 5)
-            {
-                int temp = atoi(V[i]);
-                item[count - 1].estado = temp;             // codigo do produto                
-            }
-        }
-        // Desloca a mem�ria alocada em V[i]
-        for (i = 0; i < n_campos_lidos; i++)
-        {
-            free(V[i]);
-        }
-        
-        free(V);
-        count++;
-    }
-    item =  realloc(item, (count - 1) * sizeof(item));
-    puts("erro");
-    fclose(f);
-    return item;
-}
 
 // MENUS E INTERAÇÃO
 
@@ -709,6 +493,7 @@ void menuCriarLista()
     criarLista(lista);
 }
 
+// TODO: MELHORAR A PARTE DE IR PARA CRIAR A CATEGORIA
 void menuCriarProduto()
 {
     PRODUTO produto;
@@ -758,6 +543,27 @@ void menuCriarProduto()
     }
 }
 
+// TODO: FAZER INTERFACE
+void gerenciarListas()
+{
+}
+
+// TODO: FAZER INTERFACE
+void gerenciarProdutos()
+{
+}
+
+// TODO: FAZER INTERFACE
+void gerenciarCategorias()
+{
+}
+
+// TODO: FAZER INTERFACE
+void consultarListas()
+
+{
+}
+
 int eliminarProduto(int codigo)
 {
     PRODUTO *produto;
@@ -770,40 +576,18 @@ int eliminarProduto(int codigo)
             Temp_EliminarProduto(produto[i]);
         }
     }
-    remove("Produtos.txt");
-    rename("ProdutosTemp.txt", "Produtos.txt");
+    rename("ProdutosTemp.txt", "xpto.txt");
     
-}
-
-void menuCriarItemLista()
-{
-
 }
 void menuEliminarProduto(){
     int codigo;
     printProdutos(listarProdutos());
-    printf("\n Insira o codigo do produto que deseja eliminar:");
+    printf("Insira o codigo do produto que deseja eliminar:");
     scanf("%d", &codigo);
     eliminarProduto(codigo);
 }
 
 
-// TODO: RETIRAR O I < 10 E SUBSITUTIR POR contarItensLista()
-void printItensLista(ITEMLISTA *item)
-{
-    printf("\n Itens Lista \n");
-
-    int i;
-
-    for (i = 0; i < 10 /* contarItensLista()  */; i++)
-    {
-        printf(" \n Codigo lista: %d", item[i].codigo);
-        printf("\n Nome Produto: %s", item[i].produto.nome);
-        //TODO: ADICIONAR O RESTO
-    }
-    
-
-}
 
 // TODO: ALTERAR OPÇÕES DO MENU
 int mostrarMenuPrincipal()
@@ -994,11 +778,11 @@ int mostrarMenuCategorias()
             break;
         case 3:
             system("cls");
-            listarCategorias();
+            listarListas();
             break;
         case 4:
             system("cls");
-           // eliminarCategoria();
+            eliminarLista();
         case 5:
             system("cls");
             mostrarMenuPrincipal();
@@ -1013,14 +797,53 @@ int mostrarMenuCategorias()
     } while (opcaoInvalida);
     return 0;
 }
-int mostrarMenuModoCompras()                                                         //ACABAR
+int mostrarMenuModoCompras()
 {
-    
-    int numero;
-    printListas(listarListas());
-    printf("\n Insira o codigo da lista que deseja escolher: ");
-    scanf("%d", &numero);
-    //listarItensLista(numero);
+    int opcaoInvalida;
+    int opcao;
+    do
+    {
+        system("cls");
+        printf(" _________________________________________________________________________\n");
+        printf("|                               MODO COMPRAS                              |\n");
+        printf("|_________________________________________________________________________|\n");
+        printf("\n\t1 - Adicionar categoria\n");
+        printf("\t2 - Editar categoria\n");
+        printf("\t3 - Listar as categoria\n");
+        printf("\t4 - Eliminar categoria\n");
+        printf("\t5 - Voltar\n");
+        printf("\nDigite o numero relativo ao menu a que pretende aceder: ");
+        scanf("%d", &opcao);
+        printf("\n");
+        switch (opcao)
+        {
+        case 1:
+            system("cls");
+            menuCriarLista();
+            break;
+        case 2:
+            system("cls");
+            // editarLista();
+            break;
+        case 3:
+            system("cls");
+            listarListas();
+            break;
+        case 4:
+            system("cls");
+            eliminarLista();
+        case 5:
+            system("cls");
+            mostrarMenuPrincipal();
+            break;
+        default:
+            printf("\n\tERRO! Introduza uma opcao valida\n\n");
+            system("pause");
+
+            break;
+        }
+        fseek(stdin, 2, 0);
+    } while (opcaoInvalida);
     return 0;
 }
 
@@ -1032,8 +855,6 @@ void iniciarFicheiros()
     criarFicheiroListaCompra();
     criarFicheiroCategoriasBin();
     criarFicheiroItensCabaz();
-    criarFicheiroItensLista();
-    
 }
 
 // INICIALIZAÇÃO
@@ -1044,26 +865,15 @@ int main()
     setlocale(LC_ALL, "Portuguese");
     // iniciarFicheiros();
     srand(time(NULL));
-  
+    // testes
+
+    // editarProdutos(produto);
+    // eliminarProduto(produto);
+    // menuCriarProduto();
+    // menuCriarLista();
+
     CATEGORIA *cat;
     PRODUTO *prod;
-    ITEMLISTA item;
-    ITEMLISTA *itens = listarItensLista();
-    
-    printf(" \n teste qtd %d \n", contarItensLista(itens));
-    printItensLista(itens);
-    
-    item.codigo = 582831;
-    item.estado = 0;
-    item.produto.codigo = 731344;
-    strcpy(item.produto.nome, "batata");
-    item.quantidade = 10;
-
-    
-    
-
-    
-
     // menuCriarLista();
     //menuEliminarProduto();
     //menuCriarProduto();
@@ -1071,8 +881,8 @@ int main()
     
     
     cat = listarCategorias();
-    //menuEliminarProduto();
-    //printCategorias(cat);
+    menuEliminarProduto();
+    printCategorias(cat);
 
     return 0;
 }

@@ -1,0 +1,6 @@
+abc;582831 
+punheta;502994 
+continente;1011498 
+pingo;395823 
+doce;224711 
+continente;581323 
