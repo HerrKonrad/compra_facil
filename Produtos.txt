@@ -1,5 +1,3 @@
-teste;bebida;240;451153
-xpto;hardware;240;731344
-abc;bebida;240;704556
-yyy;teste;139;802725
-abcdf;teste;240;184849
+xpto;teste;1569;314180
+xpto123;ei;240;510381
+abcedf;orgia;240;393751
